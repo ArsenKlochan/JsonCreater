@@ -4,6 +4,7 @@ import database.BaseConnector;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.Collator;
 import java.util.*;
@@ -91,7 +92,23 @@ public class StudentData {
 
 //            getMarksFromDepartment(pass);
 //            отримання даних про оцінки
-            ResultSet resultSet3 = statement.executeQuery("SELECT D_ID, HH, type_control_id, mark FROM module WHERE pass = '" + pass + "'");
+//            з системи кафедра
+//            getDataFromModule(statement, pass);
+            getMarksFromDekanat(statement, pass, "arhivnavchplan");
+            getMarksFromDekanat(statement, pass, "vuknavchplan");
+
+            statement.close();
+        }
+        catch (Exception ex){
+            System.out.println("Bad connection");
+            ex.printStackTrace();
+        }
+    }
+//    отримання даних з табллиці module
+    private void getDataFromModule(Statement statement, String pass){
+        ResultSet resultSet3 = null;
+        try {
+            resultSet3 = statement.executeQuery("SELECT D_ID, HH, type_control_id, mark FROM module WHERE pass = '" + pass + "'");
             while (resultSet3.next()) {
                 disciplineId = resultSet3.getString(1);
                 hours = Integer.parseInt(resultSet3.getString(2));
@@ -116,19 +133,13 @@ public class StudentData {
                 }
                 else if(typeOfControl > 1){
                     marks.add(new Mark(disciplineUkr, disciplineEng, hours, mark));
-//                    marks.add(new Mark(disciplineUkr, disciplineEng, hours, mark));
-//                    marks.add(new Mark(disciplineUkr, disciplineEng, hours, mark));
-//                    marksID.add(disciplineId);
                 }
             }
             this.marks = marks;
             this.practisies = practisies;
             this.atestatiion = atestatiion;
-            statement.close();
-        }
-        catch (Exception ex){
-            System.out.println("Bad connection");
-            ex.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 
@@ -150,9 +161,58 @@ public class StudentData {
         return nameAray;
     }
 //     Отримання даних про оцінки студента з таблиці Деканат
-    public void getMarksFromDepartment(String pass){
-        try (Connection connection = connector.getConnection()) {
-            Statement statement = connection.createStatement();
+    public void getMarksFromDekanat(Statement statement, String pass, String table){
+        ResultSet resultSet4 = null;
+        String courseWork;
+        String courseProject;
+        String calculationWork;
+        String exam;
+        String zalik;
+        String dyferentialZalik;
+        try {
+            resultSet4 = statement.executeQuery("SELECT D_ID, HH, KR, KP, ZV, EO, RGR, dyfZal FROM "+ table +" WHERE pass = '" + pass + "'");
+            while (resultSet4.next()) {
+                disciplineId = resultSet4.getString(1);
+                hours = Integer.parseInt(resultSet4.getString(2));
+                courseWork = resultSet4.getString(3);
+                courseProject = resultSet4.getString(4);
+                zalik = resultSet4.getString(5);
+                exam = resultSet4.getString(6);
+                calculationWork = resultSet4.getString(7);
+                dyferentialZalik = resultSet4.getString(8);
+                disciplineUkr = getDisciplineName(disciplineId)[0];
+                disciplineEng = getDisciplineName(disciplineId)[1];
+                if(hours != 0){
+                    if(courseWork != null && courseWork != "0"){
+                        courseWorks.add(new Mark("Курсова робота з дисципліни «" + disciplineUkr + "»", "Course Paper in "+ disciplineEng, hours, Integer.parseInt(courseWork)));
+                    }
+                    if(courseProject != null && courseProject != "0"){
+                       courseProjects.add(new Mark("Курсовий проект з дисципліни «" + disciplineUkr + "»", "Course Project in "+ disciplineEng, hours, Integer.parseInt(courseProject)));
+                    }
+                    if(calculationWork != null && calculationWork != "0"){
+                        calculationAndGraphicWorks.add(new Mark("Розрахунково-графічна робота з дисципліни «" + disciplineUkr + "»", "Calculation and Graphic Work in "+ disciplineEng, hours, Integer.parseInt(calculationWork)));
+                    }
+                    if(zalik != null && zalik != "0"){
+                        mark = Integer.parseInt(zalik);
+                    }
+                    else if(exam != null && exam != "0"){
+                        mark = Integer.parseInt(exam);
+                    }
+                    else if(dyferentialZalik != null && dyferentialZalik != "0"){
+                        mark = Integer.parseInt(dyferentialZalik);
+                    }
+
+                    if(listPracties.contains(disciplineId)){
+                        practisies.add(new Mark(disciplineUkr, disciplineEng, hours, mark));
+                    }
+                    else if (listAtestations.contains(disciplineId)){
+                        atestatiion = new Mark(disciplineUkr, disciplineEng, hours, mark);
+                    }
+                    else {
+                        marks.add(new Mark(disciplineUkr, disciplineEng, hours, mark));
+                    }
+                }
+            }
         }
         catch (Exception ex){
             System.out.println("Bad connection");
@@ -307,13 +367,13 @@ public class StudentData {
 //            mark = marks.get(i-1).getMark();
             if (marks.get(i).getDiscipline_ukr().equals(marks.get(i-1).getDiscipline_ukr())){
                 counter++;
-                mark += marks.get(i-1).getMark();
+                mark += marks.get(i).getMark();
                 marks.remove(i);
                 i--;
             }
             else {
                 mark += marks.get(i-1).getMark();
-                marks.get(i-1).setMark((int)Math.ceil(mark/(counter+1)));
+                marks.get(i-1).setMark((int)Math.ceil(mark*1.0/(counter+1)));
                 counter=0;
                 mark=0;
             }
