@@ -3,21 +3,15 @@ package database.objects;
 public class Mark {
     private String discipline_ukr;
     private String discipline_eng;
-    private String credits;
     private int mark;
-    private String national_grade;
-    private String ECTS;
+    private int hours;
 
     public Mark(String discipline_ukr, String discipline_eng, int hours, int mark) {
         this.discipline_ukr = discipline_ukr;
         this.discipline_eng = discipline_eng;
-        this.credits = String.format("%.1f", (hours)/30.0);
         this.mark = mark;
-        this.national_grade = getNational_grade(mark);
-        this.ECTS = getECTS(mark);
+        this.hours= hours;
     }
-
-
 
     public String getDiscipline_ukr() {
         return discipline_ukr;
@@ -26,18 +20,24 @@ public class Mark {
         return discipline_eng;
     }
     public String getCredits() {
-        return credits;
+        return String.format("%.1f", (this.hours)/30.0);
     }
     public int getMark() {
         return mark;
     }
-    public String getNational_grade() {
-        return national_grade;
+    public int getHours() {
+        return hours;
     }
-    public String getECTS() {return ECTS;}
+    public String getNational_grade() {
+        return getNational_grade(mark);
+    }
+    public String getECTS() {return getECTS(mark);}
 
     public void setMark(int mark) {
         this.mark = mark;
+    }
+    public void setHours(int hours) {
+        this.hours = hours;
     }
 
     //     Визначення оцінки за шкалою ECTS
@@ -85,10 +85,10 @@ public class Mark {
         return "Mark{" +
                 "discipline_ukr='" + discipline_ukr + '\'' +
                 ", discipline_eng='" + discipline_eng + '\'' +
-                ", credits='" + credits + '\'' +
+                ", credits='" + getCredits() + '\'' +
                 ", mark=" + mark +
-                ", national_grade='" + national_grade + '\'' +
-                ", ECTS='" + ECTS + '\'' +
+                ", national_grade='" + getNational_grade() + '\'' +
+                ", ECTS='" + getECTS() + '\'' +
                 '}';
     }
 }
