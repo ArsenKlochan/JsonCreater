@@ -23,6 +23,7 @@ public class StudentData {
     private String prev_diploma_date = "";
 //    private String prev_diploma_theme = "";
     private String name_dok_osv = "";
+    private String name_dok_osv_en = "";
     private String prev_navch_zakl = "";
     private String prev_navch_zakl_en = "";
     private String name_ukr = "";
@@ -37,6 +38,11 @@ public class StudentData {
     private String average_mark = "";
     private String average_grade = "";
     private String average_ECTS = "";
+//    кількість годин по КР, КП, РГР по факультетах (індекс в масиві -1 є номером факультету)
+//    {Транспортного будівництва, Автомеханічний, Менеджменту логістики та туризму, ЦПКз, ЦЗДН, Транспортних та інформаційних технроргій, ЦМОд, ЦПКд ЦМОз, Економіка  та права}
+    private int [] kpHoursForFaculty ={45,45,30,45,30,15,45,45,45,45};
+    private int [] krHoursForFaculty ={30,30,30,30,30,15,30,30,30,30};
+    private int [] rgrHoursForFaculty ={30,30,30,30,30,15,30,30,30,30};
 //  ІД-шки дисциплін, використовується для перевірки двохсеместрових дисциплін
     private LinkedList<String> marksID = new LinkedList<>();
 //  динамічні масиви для дисциплін, курсових робіт, курсових проектів, розрахунково-графічних робіт, практик
@@ -45,12 +51,15 @@ public class StudentData {
     private LinkedList<Mark> courseProjects = new LinkedList<>();
     private LinkedList<Mark> calculationAndGraphicWorks = new LinkedList<>();
     private LinkedList<Mark> practisies = new LinkedList<>();
-//    оцінка за підсуикову атестацію
+//    оцінка за підсумкову атестацію
     private Mark atestatiion = new Mark("","",0,0);
 //    середня оцінка
     private Mark avarage;
     private static int sumMark = 0;
     private static int sumHours = 0;
+//    матриці для назви документів про освіту українською та англійською
+    private static String [] nameDokOsv={"свідоцтво про здобуття повної загальної середньої освіти","атестат про повну загальну середню освіту","диплом фахового молодшого бакалавра","диплом молодшого спеціаліста","диплом бакалавра","диплом спеціаліста","диплом магістра"};
+    private static String [] nameDokOsvEn={"Certificate of Complete General Secondary Education","Certificate of Complete General Secondary Education","Professional Junior Bachelor Diploma","Junior Specialist Diploma","Bachelor’s Diploma","Specialist Diploma","Master’s Diploma"};
 
 //   Списки ідентифікаторів дисциплін, які являються практиками
     private static String[] practiseDId = {"1112", "1156", "1157", "1158", "1159", "1160", "1210", "5522", "5523", "5547", "5591", "5600", "5602", "5616", "5617", "5643", "5657", "5960", "5995", "6023", "6050", "6068", "6069", "6070", "6071", "6105", "6111", "6121", "6130", "6131", "6174", "6202", "6203", "6205", "6206", "6207", "6208", "6306", "6404", "6405", "6416", "6428", "6433", "6563", "6565", "6566", "6567", "6568", "6839", "6864", "6865", "6866", "6867", "6868", "6869", "7058", "7059", "7061", "7106", "7432", "7434", "7439", "7441", "7457", "7537", "8045", "8046", "8392", "8476", "8477", "8559", "9099", "9160", "9368", "9369", "9547", "9549"};
@@ -62,19 +71,20 @@ public class StudentData {
     private static BaseConnector connector = new BaseConnector();
     int count = 0;
 
+    private static int facultyId;
+
 //    Отримання даних про студента з БД
     public StudentData(String pass) {
-        countOfStudents++;
-        System.out.println(countOfStudents + " new StudentData");
         try (Connection connection = connector.getConnection()) {
             Statement statement = connection.createStatement();
 //отримання даних з таблиці анкета
-            ResultSet resultSet1 = statement.executeQuery("SELECT Birth, SNomDokOsv, DateDokOsv, NameDokOsv, NavchZakl, NavchZaklEn, P, I, B, p_en, i_en, b_en FROM anketu WHERE pass = '" + pass + "'");
+            ResultSet resultSet1 = statement.executeQuery("SELECT Birth, SNomDokOsv, DateDokOsv, NameDokOsv, NavchZakl, NavchZaklEn, P, I, B, p_en, i_en, b_en, FAC_ID FROM anketu WHERE pass = '" + pass + "'");
             while (resultSet1.next()) {
-                this.date_birth = resultSet1.getString(1);
+                this.date_birth = dateFormatString(resultSet1.getString(1));
                 this.prev_diploma_number = resultSet1.getString(2);
-                this.prev_diploma_date = resultSet1.getString(3);
+                this.prev_diploma_date = dateFormatString(resultSet1.getString(3));
                 this.name_dok_osv = resultSet1.getString(4);
+                this.name_dok_osv_en = getNameDocOsvEn(name_dok_osv);
                 this.prev_navch_zakl = resultSet1.getString(5);
                 this.prev_navch_zakl_en = resultSet1.getString(6);
                 this.surname_ukr = resultSet1.getString(7);
@@ -83,6 +93,7 @@ public class StudentData {
                 this.surname_eng = resultSet1.getString(10);
                 this.name_eng = resultSet1.getString(11);
                 this.middlename_eng = resultSet1.getString(12);
+                facultyId = Integer.parseInt(resultSet1.getString(13));
             }
 //отримання даних з таблиці додаток
             ResultSet resultSet2 = statement.executeQuery("SELECT ser_dyplom, nom_dyplom, NomDod, topicU, topicE, release_date FROM dodatok WHERE pass = '" + pass + "'");
@@ -92,14 +103,20 @@ public class StudentData {
                 this.number_supplement_diploma = resultSet2.getString(3);
                 this.diploma_theme = resultSet2.getString(4);
                 this.diploma_theme_E = resultSet2.getString(5);
-                this.date_diploma_receiving = resultSet2.getString(6);
-                this.date_receiving_supplement = resultSet2.getString(6);
+                this.date_diploma_receiving = dateFormatString(resultSet2.getString(6));
+                this.date_receiving_supplement = dateFormatString(resultSet2.getString(6));
             }
 //            отримання оцінок з дисциплін за попередні роки навчання
-            getMarksFromDekanat(statement, pass, "arhivnavchplan");
+            getMarksFromDekanat(statement, pass, "arhivnavchplan", facultyId);
 //            отримання оцінок з дисциплін за поточний рік навчання
-            getMarksFromDekanat(statement, pass, "vuknavchplan");
+            getMarksFromDekanat(statement, pass, "vuknavchplan", facultyId);
             sort(marks);
+            sort(courseProjects);
+            sort(courseWorks);
+            sort(calculationAndGraphicWorks);
+            sort(practisies);
+            checkDublicate(marks);
+            getAvarageMark();
             statement.close();
         }
         catch (Exception ex){
@@ -126,8 +143,8 @@ public class StudentData {
         return nameAray;
     }
 //     Отримання даних про оцінки студента з таблиці Деканат
-    public void getMarksFromDekanat(Statement statement, String pass, String table){
-        String disciplineId;
+    public void getMarksFromDekanat(Statement statement, String pass, String table, int facultyId){
+        String disciplineId = "";
         String disciplineUkr;
         String disciplineEng;
         int hours = 0;
@@ -155,18 +172,20 @@ public class StudentData {
                 disciplineUkr = disciplineName[0];
                 disciplineEng = disciplineName[1];
                 if(hours != 0){
-                    int hourKpKRRgr = 15;
+                    int hourKp = kpHoursForFaculty[facultyId-1];
+                    int hourKR = krHoursForFaculty[facultyId-1];
+                    int hourRgr = rgrHoursForFaculty[facultyId-1];
                     if(courseWork != null && courseWork != "0"){
-                        courseWorks.add(new Mark("Курсова робота з дисципліни «" + disciplineUkr + "»", "Course Paper in "+ disciplineEng, hourKpKRRgr, Integer.parseInt(courseWork)));
-                        hours -= hourKpKRRgr;
+                        courseWorks.add(new Mark("Курсова робота з дисципліни «" + disciplineUkr + "»", "Course Paper in "+ disciplineEng, hourKR, Integer.parseInt(courseWork)));
+                        hours -= hourKR;
                     }
                     if(courseProject != null && courseProject != "0"){
-                       courseProjects.add(new Mark("Курсовий проект з дисципліни «" + disciplineUkr + "»", "Course Project in "+ disciplineEng, hourKpKRRgr, Integer.parseInt(courseProject)));
-                       hours -= hourKpKRRgr;
+                       courseProjects.add(new Mark("Курсовий проект з дисципліни «" + disciplineUkr + "»", "Course Project in "+ disciplineEng, hourKp, Integer.parseInt(courseProject)));
+                       hours -= hourKp;
                     }
                     if(calculationWork != null && calculationWork != "0"){
-                        calculationAndGraphicWorks.add(new Mark("Розрахунково-графічна робота з дисципліни «" + disciplineUkr + "»", "Calculation and Graphic Work in "+ disciplineEng, hourKpKRRgr, Integer.parseInt(calculationWork)));
-                        hours -= hourKpKRRgr;
+                        calculationAndGraphicWorks.add(new Mark("Розрахунково-графічна робота з дисципліни «" + disciplineUkr + "»", "Calculation and Graphic Work in "+ disciplineEng, hourRgr, Integer.parseInt(calculationWork)));
+                        hours -= hourRgr;
                     }
                     if(zalik != null && zalik != "0"){
                         mark = Integer.parseInt(zalik);
@@ -189,13 +208,15 @@ public class StudentData {
                     }
                 }
             }
-        }
-        catch (Exception ex){
+        } catch (NumberFormatException ex){
+            System.out.println(disciplineId);
+            ex.printStackTrace();
+        } catch (Exception ex){
             System.out.println("Bad connection");
             ex.printStackTrace();
         }
     }
-
+//    метод toString
     @Override
     public String toString() {
         return "StudentData{" +
@@ -209,6 +230,7 @@ public class StudentData {
                 ", prev_diploma_number='" + prev_diploma_number + '\'' +
                 ", prev_diploma_date='" + prev_diploma_date + '\'' +
                 ", name_dok_osv='" + name_dok_osv + '\'' +
+                ", name_dok_osv_en='" + name_dok_osv_en + '\'' +
                 ", prev_navch_zakl='" + prev_navch_zakl + '\'' +
                 ", prev_navch_zakl_en='" + prev_navch_zakl_en + '\'' +
                 ", name_ukr='" + name_ukr + '\'' +
@@ -231,6 +253,7 @@ public class StudentData {
                 ", atestatiion=" + atestatiion +
                 '}';
     }
+//    гетери
     public String getDate_birth() {
         return date_birth;
     }
@@ -260,6 +283,9 @@ public class StudentData {
     }
     public String getName_dok_osv() {
         return name_dok_osv;
+    }
+    public String getName_dok_osv_en() {
+        return name_dok_osv_en;
     }
     public String getPrev_navch_zakl() {
         return prev_navch_zakl;
@@ -322,16 +348,15 @@ public class StudentData {
         return atestatiion;
     }
 
-//    метод сортування масиву з оцінками по назві дисциплін
-    private LinkedList<Mark> sort(LinkedList<Mark> marks){
+    //    метод сортування масиву з оцінками по назві дисциплін
+    private void sort(LinkedList<Mark> marks){
         Collator collator = Collator.getInstance(new Locale("uk","UA"));
         Collections.sort(marks,(d1, d2) ->{
             return collator.compare(d1.getDiscipline_ukr().toLowerCase(),d2.getDiscipline_ukr().toLowerCase());
         });
-        return checkDublicate(marks);
     }
-//    метод прибирання дублікатів дисциплін
-    private LinkedList<Mark> checkDublicate(LinkedList<Mark> marks){
+//    метод визначення середньої оцінки для дисциплін, які читаються кілька семестрів
+    private void checkDublicate(LinkedList<Mark> marks){
         int counter = 0;
         int mark= 0;
         int disciplineHours = 0;
@@ -353,9 +378,8 @@ public class StudentData {
                 disciplineHours=0;
             }
         }
-        getAvarageMark();
-        return marks;
     }
+//    метод отримання середньої оцінки
     private void getAvarageMark(){
         sumMark = 0;
         sumHours = 0;
@@ -369,8 +393,6 @@ public class StudentData {
         double avarrageMark = (sumMark*1.0/(marks.size() + courseWorks.size() + courseProjects.size() + calculationAndGraphicWorks.size() + practisies.size() + 1));
         avarage = new Mark("","",sumHours, (int)Math.floor(avarrageMark));
         average_mark = String.format("%.1f", avarrageMark);
-        System.out.println(avarrageMark);
-        System.out.println(average_mark);
     }
 
 //    метод підраховування суми оцінок в масиві
@@ -379,5 +401,23 @@ public class StudentData {
             sumMark += mark.getMark();
             sumHours += mark.getHours();
         }
+    }
+//    метод формування строки дати в необхідному форматі
+    private static String dateFormatString(String string){
+        if(string != null && string.length()>=10) {
+            return string.substring(8, 10) + "." + string.substring(5, 7) + "." + string.substring(0, 4);
+        }
+        else return string;
+    }
+//    метод визначення англіської назви типу документу про попередню освіту
+    private static String getNameDocOsvEn(String nameEducationDocument){
+        if (nameEducationDocument != null) {
+            for (int i = 0; i < nameDokOsv.length; i++) {
+                if (nameDokOsv[i].equals(nameEducationDocument.toLowerCase())) {
+                    return nameDokOsvEn[i];
+                }
+            }
+        }
+        return "";
     }
 }

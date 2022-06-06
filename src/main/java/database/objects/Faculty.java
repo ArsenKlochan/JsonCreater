@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Faculty {
     String facultuName;
     ArrayList<Group> groupList;
+    int facultyId;
 
     public Faculty(String facultuName) {
         this.facultuName = facultuName;
@@ -15,5 +16,8 @@ public class Faculty {
     }
     public ArrayList<Group> getGroupList() {
         return groupList;
+    }
+    public int getFacultyId() {
+        return facultyId;
     }
 }

@@ -20,7 +20,13 @@ public class Mark {
         return discipline_eng;
     }
     public String getCredits() {
-        return String.format("%.1f", (this.hours)/30.0);
+        double credits = (this.hours)/30.0;
+        if(this.hours%30 == 0){
+            return String.format("%.0f", (this.hours)/30.0);
+        }
+        else {
+            return String.format("%.1f", (this.hours)/30.0);
+        }
     }
     public int getMark() {
         return mark;

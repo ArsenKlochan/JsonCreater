@@ -3,6 +3,7 @@ package database;
 import database.objects.Faculty;
 import database.objects.Group;
 
+import java.beans.IntrospectionException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,6 +32,7 @@ public class StudentChooseSystem {
     }
 //    метод вибору студентів у чких є атестація, тобто які випускаються
     public void chooseStudent(){
+        System.out.println("Йде процес відбору студентів в яких є атестація, тобто які будуть випускатись в цьому році. Зачекайте кілька хвилин.");
         try(Connection connection = connector.getConnection()) {
             Statement statement = connection.createStatement();
 //            вибір студентів в яких є атестація (які випускаються)
@@ -40,12 +42,10 @@ public class StudentChooseSystem {
                     studentsId.add(resultSet.getString(1));
                 }
             }
-            int temp_counter = 0;
             for (String studentId: studentsId){
-                temp_counter++;
                 distributionOfStudent(studentId);
-                System.out.println(temp_counter);
             }
+            System.out.println("Student choosing done");
         } catch (SQLException throwables) {
             System.out.println("Something wrong with connection at students choose");
             throwables.printStackTrace();
@@ -58,10 +58,11 @@ public class StudentChooseSystem {
             ResultSet resultSet = statement.executeQuery("SELECT S_ID, NomGroup, NomKurs, FAC_ID, F_ID FROM anketu WHERE pass= '" + studentID + "'");
             while (resultSet.next()) {
                 String S_ID = resultSet.getString(1);
-                String facultyId = resultSet.getString(4);
+                int facultyId = Integer.parseInt(resultSet.getString(4));
+                String facultyName = facultyId + " " + faculty[facultyId-1];
                 String nameOfSpeciality = getSpecialityName(S_ID);
                 String nameOfGroup = nameOfSpeciality + "-" + resultSet.getString(3) + "-" + resultSet.getString(2) + formOfStudy[Integer.parseInt(resultSet.getString(5))-1];
-                groups.get(checkGroup(nameOfGroup, facultyId)).getStudentList().add(studentID);
+                groups.get(checkGroup(nameOfGroup, facultyName)).getStudentList().add(studentID);
             }
         } catch (SQLException throwables) {
             System.out.println("Something wrong with connection at students distribution");
@@ -74,9 +75,9 @@ public class StudentChooseSystem {
         String nameOfSpeciality = "";
         try (Connection connection = connector.getConnection()) {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT SAbrCyr FROM spec WHERE S_ID = '" + S_ID + "'");
+            ResultSet resultSet = statement.executeQuery("SELECT FAC_ID, SAbrCyr FROM spec WHERE S_ID = '" + S_ID + "'");
             while (resultSet.next()) {
-                nameOfSpeciality = resultSet.getString(1);
+                nameOfSpeciality = resultSet.getString(1) + " " + resultSet.getString(2);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -94,12 +95,12 @@ public class StudentChooseSystem {
         return groupsName.indexOf(nameGroup);
     }
 //   метод знаходження індексу факультету в динамічному масиві, якщо факультет не знаходить, то дадає його в масив
-    private int checkFaculty(String facultyId){
-        if(!facultiesId.contains(facultyId)){
-            faculties.add(new Faculty(faculty[Integer.parseInt(facultyId)-1]));
-            facultiesId.add(facultyId);
+    private int checkFaculty(String facultyName){
+        if(!facultiesId.contains(facultyName)){
+            faculties.add(new Faculty(facultyName));
+            facultiesId.add(facultyName);
         }
-        return facultiesId.indexOf(facultyId);
+        return facultiesId.indexOf(facultyName);
     }
 
 }
