@@ -116,6 +116,10 @@ public class StudentData {
             sort(calculationAndGraphicWorks);
             sort(practisies);
             checkDublicate(marks);
+            checkDublicate(courseProjects);
+            checkDublicate(courseWorks);
+            checkDublicate(calculationAndGraphicWorks);
+            checkDublicate(practisies);
             getAvarageMark();
             statement.close();
         }
