@@ -29,6 +29,7 @@ public class Main{
 //            chooseAll(studentChooseSystem);
 //        chooseForGroup(studentChooseSystem);
         chooseForFaculty(studentChooseSystem);
+//        chooseForStupidGroup(studentChooseSystem);
 
 //        Application.launch(args);
 
@@ -125,4 +126,28 @@ public class Main{
             e.printStackTrace();
         }
     }
+//    метод для тупого вказування айдішок студентів
+    private static void chooseForStupidGroup(StudentChooseSystem studentChooseSystem){
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        try{
+            System.out.println("Режим роботи програми, який забезпечує створення json-файлів для конкретної групи");
+            System.out.println("Розпочалався процес формування json-файлів. Зачекайте кілька митей");
+            ArrayList<String> studentList = new ArrayList<>();
+            studentList.add("61521");
+            studentList.add("61554");
+            studentList.add("61584");
+            studentList.add("61597");
+            LinkedList<StudentData> studentDataLinkedList = new LinkedList<>();
+            for (String studentPass : studentList) {
+                studentDataLinkedList.add(new StudentData(studentPass));
+            }
+            file = new File("stupidGroup" + ".json");
+            file.createNewFile();
+            JSONCreater.writeJsonObject(file.getAbsolutePath(), studentDataLinkedList);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
