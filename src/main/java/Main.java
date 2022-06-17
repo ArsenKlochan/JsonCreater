@@ -31,6 +31,7 @@ public class Main{
         chooseForFaculty(studentChooseSystem);
 //        chooseForStupidGroup(studentChooseSystem);
 
+
 //        Application.launch(args);
 
     }
