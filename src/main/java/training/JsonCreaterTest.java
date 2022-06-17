@@ -19,7 +19,7 @@ import java.nio.file.Paths;
 public class JsonCreaterTest {
     public static void main(String[] args) {
 //        Files files = new Files("test");
-        writeJsonSimple("test.json");
+        writeJsonSimple("test456.json");
         JSONObject jsonObject = (JSONObject) readJsonSimple("test.json");
         System.out.println(jsonObject);
         System.out.println(jsonObject.get("age"));
