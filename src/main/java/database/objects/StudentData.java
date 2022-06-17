@@ -38,6 +38,7 @@ public class StudentData {
     private String average_mark = "";
     private String average_grade = "";
     private String average_ECTS = "";
+    private String person_Fo_EdboId = "";
 //    кількість годин по КР, КП, РГР по факультетах (індекс в масиві -1 є номером факультету)
 //    {Транспортного будівництва, Автомеханічний, Менеджменту логістики та туризму, ЦПКз, ЦЗДН, Транспортних та інформаційних технроргій, ЦМОд, ЦПКд ЦМОз, Економіка  та права}
     private int [] kpHoursForFaculty ={45,45,30,45,30,15,45,45,45,45};
@@ -65,7 +66,7 @@ public class StudentData {
     private static String[] practiseDId = {"1112", "1156", "1157", "1158", "1159", "1160", "1210", "5522", "5523", "5547", "5591", "5600", "5602", "5616", "5617", "5643", "5657", "5960", "5995", "6023", "6050", "6068", "6069", "6070", "6071", "6105", "6111", "6121", "6130", "6131", "6174", "6202", "6203", "6205", "6206", "6207", "6208", "6306", "6404", "6405", "6416", "6428", "6433", "6563", "6565", "6566", "6567", "6568", "6839", "6864", "6865", "6866", "6867", "6868", "6869", "7058", "7059", "7061", "7106", "7432", "7434", "7439", "7441", "7457", "7537", "8045", "8046", "8392", "8476", "8477", "8559", "9099", "9160", "9368", "9369", "9547", "9549"};
     private static List<String> listPracties = Arrays.asList(practiseDId);
 //   Списки ідентифікаторів дисциплін, які являються підсумковими атестаціями
-    private static String[] atestationID = {"5590", "6065", "6066", "6067", "6167", "6175", "6195", "6367", "6368", "6369", "6424", "6429", "6430", "6434", "6444", "6447", "6507", "6516", "6520", "6521", "6528", "6558", "6710", "6711", "6813", "6814", "6821", "6828", "6829", "6830", "6831", "6832", "6870", "6871", "6877", "6882", "6883", "6884", "6885", "6886", "6887", "6888", "6889", "6890", "6891", "6892", "6893", "6894", "6895", "6896", "6897", "6898", "6899", "6900", "6902", "6903", "6904", "6958", "6959", "6963", "6964", "6965", "6967", "6968", "6970", "6971", "6972", "6973", "6974", "6975", "6976", "6977", "6978", "6979", "6980", "6981", "6982", "6983", "6984", "6985", "6986", "6987", "6988", "6989", "6990", "6991", "6992", "6993", "7003", "7004", "7005", "7006", "7007", "7010", "7011", "7065", "7066", "7067", "7087", "7088", "7089", "7099", "7101", "7102", "7103", "7107", "7108", "7109", "7110", "7111", "7112", "7113", "7114", "7115", "7116", "7117", "7118", "7137", "7138", "7139", "7446", "7447", "7453", "7455", "7456", "7599", "7618", "7668", "7671", "7672", "7673", "7674", "7675", "7676", "7677", "7678", "7679", "7680", "8081", "8254", "8360", "8519", "8653", "8755", "8756", "9107", "9153", "9251", "9261", "9326", "9338", "9357", "9359", "9360", "9435", "9551"};
+    private static String[] atestationID = {"5590", "6065", "6066", "6067", "6167", "6175", "6195", "6367", "6368", "6369", "6424", "6429", "6430", "6434", "6444", "6447", "6507", "6516", "6520", "6521", "6528", "6558", "6710", "6711", "6813", "6814", "6821", "6828", "6829", "6830", "6831", "6832", "6870", "6871", "6877", "6882", "6883", "6884", "6885", "6886", "6887", "6888", "6889", "6890", "6891", "6892", "6893", "6894", "6895", "6896", "6897", "6898", "6899", "6900", "6902", "6903", "6904", "6958", "6959", "6963", "6964", "6965", "6967", "6968", "6970", "6971", "6972", "6973", "6974", "6975", "6976", "6977", "6978", "6979", "6980", "6981", "6982", "6983", "6984", "6985", "6986", "6987", "6988", "6989", "6990", "6991", "6992", "6993", "7003", "7004", "7005", "7006", "7007", "7010", "7011", "7065", "7066", "7067", "7087", "7088", "7089", "7099", "7101", "7102", "7103", "7107", "7108", "7109", "7110", "7111", "7112", "7113", "7114", "7115", "7116", "7117", "7118", "7137", "7138", "7139", "7446", "7447", "7453", "7455", "7456", "7599", "7618", "7668", "7671", "7672", "7673", "7674", "7675", "7676", "7677", "7678", "7679", "7680", "8081", "8254", "8360", "8519", "8653", "8755", "8756", "9107", "9153", "9251", "9261", "9326", "9338", "9357", "9359", "9360", "9435", "9551", "9560"};
     private static List<String> listAtestations = Arrays.asList(atestationID);
 //    об'єкт з'єднання з базою даних
     private static BaseConnector connector = new BaseConnector();
@@ -78,7 +79,7 @@ public class StudentData {
         try (Connection connection = connector.getConnection()) {
             Statement statement = connection.createStatement();
 //отримання даних з таблиці анкета
-            ResultSet resultSet1 = statement.executeQuery("SELECT Birth, SNomDokOsv, DateDokOsv, NameDokOsv, NavchZakl, NavchZaklEn, P, I, B, p_en, i_en, b_en, FAC_ID FROM anketu WHERE pass = '" + pass + "'");
+            ResultSet resultSet1 = statement.executeQuery("SELECT Birth, SNomDokOsv, DateDokOsv, NameDokOsv, NavchZakl, NavchZaklEn, P, I, B, p_en, i_en, b_en, FAC_ID, educationEdboId, personEdboId FROM anketu WHERE pass = '" + pass + "'");
             while (resultSet1.next()) {
                 this.date_birth = dateFormatString(resultSet1.getString(1));
                 this.prev_diploma_number = resultSet1.getString(2);
@@ -94,17 +95,18 @@ public class StudentData {
                 this.name_eng = resultSet1.getString(11);
                 this.middlename_eng = resultSet1.getString(12);
                 facultyId = Integer.parseInt(resultSet1.getString(13));
+                this.number_supplement_diploma = resultSet1.getString(14);
+                this.person_Fo_EdboId = resultSet1.getString(15);
             }
 //отримання даних з таблиці додаток
-            ResultSet resultSet2 = statement.executeQuery("SELECT ser_dyplom, nom_dyplom, NomDod, topicU, topicE, release_date FROM dodatok WHERE pass = '" + pass + "'");
+            ResultSet resultSet2 = statement.executeQuery("SELECT ser_dyplom, nom_dyplom, topicU, topicE, release_date FROM dodatok WHERE pass = '" + pass + "'");
             while (resultSet2.next()) {
                 this.series_diploma = resultSet2.getString(1);
                 this.number_diploma = resultSet2.getString(2);
-                this.number_supplement_diploma = resultSet2.getString(3);
-                this.diploma_theme = resultSet2.getString(4);
-                this.diploma_theme_E = resultSet2.getString(5);
-                this.date_diploma_receiving = dateFormatString(resultSet2.getString(6));
-                this.date_receiving_supplement = dateFormatString(resultSet2.getString(6));
+                this.diploma_theme = resultSet2.getString(3);
+                this.diploma_theme_E = resultSet2.getString(4);
+                this.date_diploma_receiving = dateFormatString(resultSet2.getString(5));
+                this.date_receiving_supplement = dateFormatString(resultSet2.getString(5));
             }
 //            отримання оцінок з дисциплін за попередні роки навчання
             getMarksFromDekanat(statement, pass, "arhivnavchplan", facultyId);
@@ -351,6 +353,9 @@ public class StudentData {
     public Mark getAtestatiion() {
         return atestatiion;
     }
+    public String getPersonFoEdboId() {
+        return person_Fo_EdboId;
+    }
 
     //    метод сортування масиву з оцінками по назві дисциплін
     private void sort(LinkedList<Mark> marks){
@@ -371,12 +376,18 @@ public class StudentData {
                 disciplineHours += marks.get(i).getHours();
                 marks.remove(i);
                 i--;
+//                System.out.println("iner in");
+//                System.out.println(marks.get(i).getDiscipline_ukr());
+//                System.out.println(disciplineHours);
+//                System.out.println("iner out");
             }
             else {
                 mark += marks.get(i-1).getMark();
                 disciplineHours += marks.get(i-1).getHours();
                 marks.get(i-1).setMark((int)Math.ceil(mark*1.0/(counter+1)));
                 marks.get(i-1).setHours(disciplineHours);
+//                System.out.println(marks.get(i-1).getDiscipline_ukr());
+//                System.out.println(disciplineHours);
                 counter=0;
                 mark=0;
                 disciplineHours=0;

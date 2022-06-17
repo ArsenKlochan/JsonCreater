@@ -24,6 +24,7 @@ public class JSONCreater {
             oneStudent.put("date_diploma_receiving", student.getDate_diploma_receiving());
             oneStudent.put("number_supplement_diploma", student.getNumber_supplement_diploma());
             oneStudent.put("date_receiving_supplement", student.getDate_receiving_supplement());
+            oneStudent.put("person_Fo_EdboId", student.getPersonFoEdboId());
             oneStudent.put("prev_diploma_number", student.getPrev_diploma_number());
             oneStudent.put("prev_diploma_date", student.getPrev_diploma_date());
             oneStudent.put("name_dok_osv", student.getName_dok_osv());
