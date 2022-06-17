@@ -30,6 +30,7 @@ public class Main{
 //        chooseForGroup(studentChooseSystem);
         chooseForFaculty(studentChooseSystem);
 
+
 //        Application.launch(args);
 
     }
