@@ -81,6 +81,7 @@ public class StudentData {
 //    Отримання даних про студента з БД
     public StudentData(String pass) {
         try (Connection connection = connector.getConnection()) {
+            System.out.println();
             Statement statement = connection.createStatement();
 //отримання даних з таблиці анкета
             ResultSet resultSet1 = statement.executeQuery("SELECT Birth, SNomDokOsv, DateDokOsv, NameDokOsv, NavchZakl, NavchZaklEn, P, I, B, p_en, i_en, b_en, FAC_ID, educationEdboId, personEdboId FROM anketu WHERE pass = '" + pass + "'");
