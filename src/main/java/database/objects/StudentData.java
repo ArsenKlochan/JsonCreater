@@ -74,14 +74,15 @@ public class StudentData {
 
 //    об'єкт з'єднання з базою даних
     private static BaseConnector connector = new BaseConnector();
+    private static Connection connection = connector.getConnection();
     int count = 0;
 
     private static int facultyId;
 
 //    Отримання даних про студента з БД
     public StudentData(String pass) {
-        try (Connection connection = connector.getConnection()) {
-            System.out.println();
+        try {
+            System.out.print(".");
             Statement statement = connection.createStatement();
 //отримання даних з таблиці анкета
             ResultSet resultSet1 = statement.executeQuery("SELECT Birth, SNomDokOsv, DateDokOsv, NameDokOsv, NavchZakl, NavchZaklEn, P, I, B, p_en, i_en, b_en, FAC_ID, educationEdboId, personEdboId FROM anketu WHERE pass = '" + pass + "'");
@@ -139,7 +140,7 @@ public class StudentData {
 //  метод отримання назви дисципліни українською та англійською за ідентифікатором з таблиці дисциплін
     private static String[] getDisciplineName(String disciplineId){
         String[] nameAray = new String[2];
-        try (Connection connection = connector.getConnection()) {
+        try {
             Statement statement = connection.createStatement();
             ResultSet resultSet4 = statement.executeQuery("SELECT DFullName, DLatName FROM duscuplinu WHERE D_ID = '" +disciplineId + "'");
                 while (resultSet4.next()) {

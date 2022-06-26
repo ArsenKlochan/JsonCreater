@@ -18,7 +18,7 @@ public class StudentChooseSystem {
     private static String[] faculty = {"ФТБ", "АМФ", "ФМЛТ", "ФЗДН(ЦПК ППСз)", "ФЗДН(ЦЗДН)", "ФТІТ", "ФЗДН(ЦМОд)", "ФЗДН(ЦПК ППСд)", "ФЗДН(ЦМОз)", "ФЕП"};
     private static String[] formOfStudy = {"д", "з"};
     private static BaseConnector connector = new BaseConnector();
-
+    private static Connection connection = connector.getConnection();
     private static ArrayList<String> studentsId = new ArrayList<>();
 
     private static ArrayList<Group> groups = new ArrayList<>();
@@ -33,7 +33,7 @@ public class StudentChooseSystem {
 //    метод вибору студентів у чких є атестація, тобто які випускаються
     public void chooseStudent(){
         System.out.println("Йде процес відбору студентів в яких є атестація, тобто які будуть випускатись в цьому році. Зачекайте кілька хвилин.");
-        try(Connection connection = connector.getConnection()) {
+        try {
             Statement statement = connection.createStatement();
 //            вибір студентів в яких є атестація (які випускаються)
             for(String D_ID: listAtestations){
@@ -53,7 +53,7 @@ public class StudentChooseSystem {
     }
 //  метод розподілу студентів по групам
     private void distributionOfStudent(String studentID){
-        try(Connection connection = connector.getConnection()) {
+        try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT S_ID, NomGroup, NomKurs, FAC_ID, F_ID FROM anketu WHERE pass= '" + studentID + "'");
             while (resultSet.next()) {
@@ -73,7 +73,7 @@ public class StudentChooseSystem {
 //    метод визначення шифру спеціальності
     private String getSpecialityName(String S_ID) {
         String nameOfSpeciality = "";
-        try (Connection connection = connector.getConnection()) {
+        try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT FAC_ID, SAbrCyr FROM spec WHERE S_ID = '" + S_ID + "'");
             while (resultSet.next()) {

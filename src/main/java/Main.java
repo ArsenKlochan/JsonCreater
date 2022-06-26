@@ -28,8 +28,8 @@ public class Main{
             studentChooseSystem.chooseStudent();
 //            chooseAll(studentChooseSystem);
 //        chooseForGroup(studentChooseSystem);
-//        chooseForFaculty(studentChooseSystem);
-        chooseForStupidGroup(studentChooseSystem);
+        chooseForFaculty(studentChooseSystem);
+//        chooseForStupidGroup(studentChooseSystem);
 
 
 //        Application.launch(args);
@@ -81,10 +81,11 @@ public class Main{
                 LinkedList<StudentData> studentDataLinkedList = new LinkedList<>();
                 file = new File(directory, group.getGroupName() + ".json");
                 file.createNewFile();
-                System.out.println(group.getGroupName());
+                System.out.print(group.getGroupName());
                 for (String studentPass : group.getStudentList()) {
                     studentDataLinkedList.add(new StudentData(studentPass));
                 }
+                System.out.println();
                 JSONCreater.writeJsonObject(file.getAbsolutePath(), studentDataLinkedList);
             }
             System.out.println("Done");
