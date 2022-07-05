@@ -53,7 +53,7 @@ public class StudentData {
     private LinkedList<Mark> calculationAndGraphicWorks = new LinkedList<>();
     private LinkedList<Mark> practisies = new LinkedList<>();
 //    оцінка за підсумкову атестацію
-    private Mark atestatiion = new Mark("","",0,0);
+    private LinkedList<Mark> atestatiion = new LinkedList<>();
 //    середня оцінка
     private Mark avarage;
     private static int sumMark = 0;
@@ -213,7 +213,7 @@ public class StudentData {
                         practisies.add(new Mark(disciplineUkr, disciplineEng, hours, mark));
                     }
                     else if (listAtestations.contains(disciplineId)){
-                        atestatiion = new Mark(disciplineUkr, disciplineEng, hours, mark);
+                        atestatiion.add(new Mark(disciplineUkr, disciplineEng, hours, mark));
                     }
                     else {
                         marks.add(new Mark(disciplineUkr, disciplineEng, hours, mark));
@@ -356,7 +356,7 @@ public class StudentData {
     public LinkedList<Mark> getPractisies() {
         return practisies;
     }
-    public Mark getAtestatiion() {
+    public LinkedList<Mark> getAtestatiion() {
         return atestatiion;
     }
     public String getPersonFoEdboId() {
@@ -409,8 +409,7 @@ public class StudentData {
         sumMarks(courseProjects);
         sumMarks(calculationAndGraphicWorks);
         sumMarks(practisies);
-        sumMark += atestatiion.getMark();
-        sumHours += atestatiion.getHours();
+        sumMarks(atestatiion);
         double avarrageMark = (sumMark*1.0/(marks.size() + courseWorks.size() + courseProjects.size() + calculationAndGraphicWorks.size() + practisies.size() + 1));
         avarage = new Mark("","",sumHours, (int)Math.floor(avarrageMark));
         average_mark = String.format("%.1f", avarrageMark);
@@ -434,7 +433,7 @@ public class StudentData {
     private static String getNameDocOsvEn(String nameEducationDocument){
         if (nameEducationDocument != null) {
             for (int i = 0; i < nameDokOsv.length; i++) {
-                if (nameDokOsv[i].equals(nameEducationDocument.toLowerCase())) {
+                if (nameDokOsv[i].equals(nameEducationDocument.trim().toLowerCase())) {
                     return nameDokOsvEn[i];
                 }
             }

@@ -46,6 +46,7 @@ public class JSONCreater {
             JSONArray marks = new JSONArray();
             JSONArray course_works = new JSONArray();
             JSONArray practisies = new JSONArray();
+            JSONArray atestatiions = new JSONArray();
             for (Mark mark: student.getMarks()){
                 marks.add(getMark(mark));
             }
@@ -61,10 +62,13 @@ public class JSONCreater {
             for (Mark mark: student.getPractisies()){
                 practisies.add(getMark(mark));
             }
+            for (Mark mark: student.getAtestatiion()){
+                atestatiions.add(getMark(mark));
+            }
             oneStudent.put("marks", marks);
             oneStudent.put("course_works", course_works);
             oneStudent.put("practisies", practisies);
-            oneStudent.put("atestation", getMark(student.getAtestatiion()));
+            oneStudent.put("atestation", atestatiions);
             users.add(oneStudent);
         }
         jsonObject.put("users", users);
