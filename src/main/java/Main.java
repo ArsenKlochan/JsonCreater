@@ -134,11 +134,13 @@ public class Main{
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         try{
             System.out.println("Режим роботи програми, який забезпечує створення json-файлів для конкретної групи");
-            System.out.println("Розпочалався процес формування json-файлів. Зачекайте кілька митей");
+            System.out.println("Розпочався процес формування json-файлів. Зачекайте кілька митей");
             ArrayList<String> studentList = new ArrayList<>();
-            studentList.add("61860");
-            studentList.add("61871");
-            studentList.add("61890");
+            studentList.add("64441");
+//            studentList.add("64426");
+//            studentList.add("64455");
+//            studentList.add("65434");
+//            studentList.add("65436");
             LinkedList<StudentData> studentDataLinkedList = new LinkedList<>();
             for (String studentPass : studentList) {
                 studentDataLinkedList.add(new StudentData(studentPass));
