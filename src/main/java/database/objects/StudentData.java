@@ -497,6 +497,18 @@ public class StudentData {
             sumMark += mark.getMark();
             sumHours += mark.getHours();
             countMarks++;
+            if (mark.getMark() > 89){
+                five++;
+            }
+            else if(mark.getMark() > 73){
+                four++;
+            }
+            else if(mark.getMark() > 59){
+                three++;
+            }
+            else{
+               two++;
+            }
         }
     }
 //    метод формування строки дати в необхідному форматі
