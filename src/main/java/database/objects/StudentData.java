@@ -41,6 +41,12 @@ public class StudentData {
     private String average_ECTS = "";
     private String person_Fo_EdboId = "";
     private String person_Edu_EdboId = "";
+    private String percent_twos = "";
+    private String percent_threes = "";
+    private String percent_fours = "";
+    private String percent_fives = "";
+    private String excellence = "";
+    private String excellenceEng = "";
 //    кількість годин по КР, КП, РГР по факультетах (індекс в масиві -1 є номером факультету)
 //    {Транспортного будівництва, Автомеханічний, Менеджменту логістики та туризму, ЦПКз, ЦЗДН, Транспортних та інформаційних технроргій, ЦМОд, ЦПКд ЦМОз, Економіка  та права}
     private int [] kpHoursForFaculty ={45,45,30,45,30,15,45,45,45,45};
@@ -60,6 +66,12 @@ public class StudentData {
     private Mark avarage;
     private static int sumMark = 0;
     private static int sumHours = 0;
+    private static int countMarks = 0;
+    // кількість п'ятірок, чітвірок, трійок тв двійок
+    private static int five = 0;
+    private static int four = 0;
+    private static int three = 0;
+    private static int two = 0;
 //    матриці для назви документів про освіту українською та англійською
     private static String [] nameDokOsv={"свідоцтво про здобуття повної загальної середньої освіти","атестат про повну загальну середню освіту","диплом фахового молодшого бакалавра","диплом молодшого спеціаліста","диплом бакалавра","диплом спеціаліста","диплом магістра"};
     private static String [] nameDokOsvEn={"Certificate of Complete General Secondary Education","Certificate of Complete General Secondary Education","Professional Junior Bachelor Diploma","Junior Specialist Diploma","Bachelor’s Diploma","Specialist Diploma","Master’s Diploma"};
@@ -374,6 +386,24 @@ public class StudentData {
     public String getPrev_diploma_date_slash() {
         return prev_diploma_date_slash;
     }
+    public String getPercent_twos() {
+        return percent_twos;
+    }
+    public String getPercent_threes() {
+        return percent_threes;
+    }
+    public String getPercent_fours() {
+        return percent_fours;
+    }
+    public String getPercent_fives() {
+        return percent_fives;
+    }
+    public String getExcellence() {
+        return excellence;
+    }
+    public String getExcellenceEng() {
+        return excellenceEng;
+    }
 
     //    метод сортування масиву з оцінками по назві дисциплін
     private void sort(LinkedList<Mark> marks){
@@ -434,9 +464,29 @@ public class StudentData {
         sumMarks(calculationAndGraphicWorks);
         sumMarks(practisies);
         sumMarks(atestatiion);
-        double avarrageMark = (sumMark*1.0/(marks.size() + courseWorks.size() + courseProjects.size() + calculationAndGraphicWorks.size() + practisies.size() + 1));
+        double avarrageMark = (sumMark*1.0/countMarks);
         avarage = new Mark("","",sumHours, (int)Math.floor(avarrageMark));
         average_mark = String.format("%.1f", avarrageMark);
+        getPrrcentMarks();
+    }
+//   метод визначення відсотку п'ятірок, чітвірок, трійок та двійок
+    private void getPrrcentMarks(){
+        double percentTwos = two*100.0/countMarks;
+        double percentThrees = three*100.0/countMarks;
+        double percentFours = four*100.0/countMarks;
+        double percentFives = five*100.0/countMarks;
+        percent_fives = String.format("%.1f", percentFives) + " %";
+        percent_fours = String.format("%.1f", percentFours) + " %";
+        percent_threes = String.format("%.1f", percentThrees) + " %";
+        percent_twos = String.format("%.1f", percentTwos) + " %";
+        if(two == 0 && three == 0 && percentFives<=25.0){
+            excellence= "З відзнакою";
+            excellenceEng = "With honours";
+        }
+        else {
+            excellence= "Інформація про особливі досягнення та відзнаки відсутня";
+            excellenceEng = "Information on academic excellence and honours is absent";
+        }
     }
 
 //    метод підраховування суми оцінок в масиві
@@ -444,6 +494,7 @@ public class StudentData {
         for (Mark mark: marks){
             sumMark += mark.getMark();
             sumHours += mark.getHours();
+            countMarks++;
         }
     }
 //    метод формування строки дати в необхідному форматі
