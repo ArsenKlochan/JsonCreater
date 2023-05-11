@@ -45,6 +45,7 @@ public class StudentData {
     private String percent_threes = "";
     private String percent_fours = "";
     private String percent_fives = "";
+    private String percent_sum = "";
     private String excellence = "";
     private String excellenceEng = "";
 //    кількість годин по КР, КП, РГР по факультетах (індекс в масиві -1 є номером факультету)
@@ -404,6 +405,9 @@ public class StudentData {
     public String getExcellenceEng() {
         return excellenceEng;
     }
+    public String getPercent_sum() {
+        return percent_sum;
+    }
 
     //    метод сортування масиву з оцінками по назві дисциплін
     private void sort(LinkedList<Mark> marks){
@@ -473,14 +477,17 @@ public class StudentData {
     }
 //   метод визначення відсотку п'ятірок, чітвірок, трійок та двійок
     private void getPrrcentMarks(){
-        double percentTwos = Math.round(two*1000.0/countMarks)/10;
-        double percentThrees = Math.round(three*1000.0/countMarks)/10;
-        double percentFours = Math.round(four*1000.0/countMarks)/10;
-        double percentFives = Math.round(five*1000.0/countMarks)/10;
-        percent_fives = String.format("%.1f", percentFives) + " %";
-        percent_fours = String.format("%.1f", percentFours) + " %";
-        percent_threes = String.format("%.1f", percentThrees) + " %";
-        percent_twos = String.format("%.1f", percentTwos) + " %";
+        double percentTwos = Math.round(two*10000.0/countMarks)/100;
+        double percentThrees = Math.round(three*10000.0/countMarks)/100;
+        double percentFours = Math.round(four*10000.0/countMarks)/100;
+        double percentFives = Math.round(five*10000.0/countMarks)/100;
+        double percentSum = percentFives + percentFours + percentThrees + percentTwos;
+        percent_fives = String.format("%.2f", percentFives) + " %";
+        percent_fours = String.format("%.2f", percentFours) + " %";
+        percent_threes = String.format("%.2f", percentThrees) + " %";
+        percent_twos = String.format("%.2f", percentTwos) + " %";
+        percent_sum = String.format("%.2f", percentSum) + " %";
+
         if(two == 0 && three == 0 && percentFives<=25.0){
             excellence= "З відзнакою";
             excellenceEng = "With honours";
