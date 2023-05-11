@@ -21,6 +21,7 @@ public class StudentData {
     private String date_receiving_supplement = "";
     private String prev_diploma_number = "";
     private String prev_diploma_date = "";
+    private String prev_diploma_date_slash = "";
 //    private String prev_diploma_theme = "";
     private String name_dok_osv = "";
     private String name_dok_osv_en = "";
@@ -67,7 +68,7 @@ public class StudentData {
     private static String[] practiseDId = {"1112", "1156", "1157", "1158", "1159", "1160", "1210", "5522", "5523", "5547", "5591", "5600", "5602", "5616", "5617", "5643", "5657", "5960", "5995", "6023", "6050", "6068", "6069", "6070", "6071", "6105", "6111", "6121", "6130", "6131", "6174", "6202", "6203", "6205", "6206", "6207", "6208", "6306", "6404", "6405", "6416", "6428", "6433", "6563", "6565", "6566", "6567", "6568", "6839", "6864", "6865", "6866", "6867", "6868", "6869", "7058", "7059", "7061", "7106", "7432", "7434", "7439", "7441", "7457", "7537", "8045", "8046", "8392", "8476", "8477", "8559", "9099", "9160", "9368", "9369", "9547", "9549"};
     private static List<String> listPracties = Arrays.asList(practiseDId);
 //   Списки ідентифікаторів дисциплін, які являються підсумковими атестаціями
-    private static String[] atestationID = {"5590", "6065", "6066", "6067", "6167", "6175", "6195", "6367", "6368", "6369", "6424", "6429", "6430", "6434", "6444", "6447", "6507", "6516", "6520", "6521", "6528", "6558", "6710", "6711", "6813", "6814", "6821", "6828", "6829", "6830", "6831", "6832", "6870", "6871", "6877", "6882", "6883", "6884", "6885", "6886", "6887", "6888", "6889", "6890", "6891", "6892", "6893", "6894", "6895", "6896", "6897", "6898", "6899", "6900", "6902", "6903", "6904", "6958", "6959", "6963", "6964", "6965", "6967", "6968", "6970", "6971", "6972", "6973", "6974", "6975", "6976", "6977", "6978", "6979", "6980", "6981", "6982", "6983", "6984", "6985", "6986", "6987", "6988", "6989", "6990", "6991", "6992", "6993", "7003", "7004", "7005", "7006", "7007", "7010", "7011", "7065", "7066", "7067", "7087", "7088", "7089", "7099", "7101", "7102", "7103", "7107", "7108", "7109", "7110", "7111", "7112", "7113", "7114", "7115", "7116", "7117", "7118", "7137", "7138", "7139", "7446", "7447", "7453", "7455", "7456", "7599", "7618", "7668", "7671", "7672", "7673", "7674", "7675", "7676", "7677", "7678", "7679", "7680", "8081", "8254", "8360", "8519", "8653", "8755", "8756", "9107", "9153", "9251", "9261", "9326", "9338", "9357", "9359", "9360", "9435", "9551", "9560", "9720"};
+    private static String[] atestationID = {"7590" ,"5590", "6065", "6066", "6067", "6167", "6175", "6195", "6367", "6368", "6369", "6424", "6429", "6430", "6434", "6444", "6447", "6507", "6516", "6520", "6521", "6528", "6558", "6710", "6711", "6813", "6814", "6821", "6828", "6829", "6830", "6831", "6832", "6870", "6871", "6877", "6882", "6883", "6884", "6885", "6886", "6887", "6888", "6889", "6890", "6891", "6892", "6893", "6894", "6895", "6896", "6897", "6898", "6899", "6900", "6902", "6903", "6904", "6958", "6959", "6963", "6964", "6965", "6967", "6968", "6970", "6971", "6972", "6973", "6974", "6975", "6976", "6977", "6978", "6979", "6980", "6981", "6982", "6983", "6984", "6985", "6986", "6987", "6988", "6989", "6990", "6991", "6992", "6993", "7003", "7004", "7005", "7006", "7007", "7010", "7011", "7065", "7066", "7067", "7087", "7088", "7089", "7099", "7101", "7102", "7103", "7107", "7108", "7109", "7110", "7111", "7112", "7113", "7114", "7115", "7116", "7117", "7118", "7137", "7138", "7139", "7446", "7447", "7453", "7455", "7456", "7599", "7618", "7668", "7671", "7672", "7673", "7674", "7675", "7676", "7677", "7678", "7679", "7680", "8081", "8254", "8360", "8519", "8653", "8755", "8756", "9107", "9153", "9251", "9261", "9326", "9338", "9357", "9359", "9360", "9435", "9551", "9560", "9720"};
     private static List<String> listAtestations = Arrays.asList(atestationID);
 //    Список ідентифікаторів дисциплін, які є факультативними і не вписуються в додаток
     private static String[] optionalDisciplineId = {"6346", "5692", "804"};
@@ -91,6 +92,9 @@ public class StudentData {
                 this.date_birth = dateFormatString(resultSet1.getString(1));
                 this.prev_diploma_number = resultSet1.getString(2);
                 this.prev_diploma_date = dateFormatString(resultSet1.getString(3));
+                this.prev_diploma_date_slash=this.prev_diploma_date.substring(0,2)+"/"+this.prev_diploma_date.substring(3,5)+"/"+this.prev_diploma_date.substring(6,10);
+                System.out.println(prev_diploma_date);
+                System.out.println(prev_diploma_date_slash);
                 this.name_dok_osv = resultSet1.getString(4);
                 this.name_dok_osv_en = getNameDocOsvEn(name_dok_osv);
                 this.prev_navch_zakl = resultSet1.getString(5);
@@ -367,6 +371,9 @@ public class StudentData {
     public String getPerson_Edu_EdboId() {
         return person_Edu_EdboId;
     }
+    public String getPrev_diploma_date_slash() {
+        return prev_diploma_date_slash;
+    }
 
     //    метод сортування масиву з оцінками по назві дисциплін
     private void sort(LinkedList<Mark> marks){
@@ -378,32 +385,44 @@ public class StudentData {
 //    метод визначення середньої оцінки для дисциплін, які читаються кілька семестрів
     private void checkDublicate(LinkedList<Mark> marks){
         int counter = 0;
-        int mark= 0;
-        int disciplineHours = 0;
+        int mark = marks.get(0).getMark()*marks.get(0).getHours();
+        int disciplineHours = marks.get(0).getHours();
+        boolean isDuble=false;
         for (int i = 1; i < marks.size(); i++){
             if (marks.get(i).getDiscipline_ukr().equals(marks.get(i-1).getDiscipline_ukr())){
+                isDuble=true;
                 counter++;
                 mark += marks.get(i).getMark()*marks.get(i).getHours();
                 disciplineHours += marks.get(i).getHours();
                 marks.remove(i);
                 i--;
-//                System.out.println("iner in");
+//                System.out.println("iner 1");
 //                System.out.println(marks.get(i).getDiscipline_ukr());
 //                System.out.println(disciplineHours);
 //                System.out.println("iner out");
             }
             else {
-                mark += marks.get(i-1).getMark()*marks.get(i-1).getHours();
-                disciplineHours += marks.get(i-1).getHours();
+                isDuble=false;
                 marks.get(i-1).setMark((int)Math.ceil(mark*1.0/disciplineHours));
                 marks.get(i-1).setHours(disciplineHours);
-//                System.out.println(marks.get(i-1).getDiscipline_ukr());
-//                System.out.println(disciplineHours);
                 counter=0;
                 mark=0;
                 disciplineHours=0;
+                mark += marks.get(i).getMark()*marks.get(i).getHours();
+                disciplineHours += marks.get(i).getHours();
             }
         }
+        // якщо остання дисципліна в списку була кількохсеместровою, то запише цю об'єднану дисципліну в матрицю дисциплін
+        if(isDuble) {
+            marks.get(marks.size() - 1).setMark((int) Math.ceil(mark * 1.0 / disciplineHours));
+            marks.get(marks.size() - 1).setHours(disciplineHours);
+        }
+
+//        for (int i = 0; i < marks.size(); i++){
+//            System.out.println(marks.get(i).getDiscipline_ukr());
+//            System.out.println(marks.get(i).getHours());
+//            System.out.println(marks.get(i).getCredits());
+//        }
     }
 //    метод отримання середньої оцінки
     private void getAvarageMark(){

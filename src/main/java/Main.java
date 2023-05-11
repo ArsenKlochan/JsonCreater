@@ -27,8 +27,8 @@ public class Main{
             StudentChooseSystem studentChooseSystem = new StudentChooseSystem();
             studentChooseSystem.chooseStudent();
 //            chooseAll(studentChooseSystem);
-//        chooseForGroup(studentChooseSystem);
-        chooseForFaculty(studentChooseSystem);
+        chooseForGroup(studentChooseSystem);
+//        chooseForFaculty(studentChooseSystem);
 //        chooseForStupidGroup(studentChooseSystem);
 
 
@@ -136,11 +136,19 @@ public class Main{
             System.out.println("Режим роботи програми, який забезпечує створення json-файлів для конкретної групи");
             System.out.println("Розпочався процес формування json-файлів. Зачекайте кілька митей");
             ArrayList<String> studentList = new ArrayList<>();
-            studentList.add("64441");
-//            studentList.add("64426");
-//            studentList.add("64455");
-//            studentList.add("65434");
-//            studentList.add("65436");
+            studentList.add("57966");
+            studentList.add("57978");
+            studentList.add("57980");
+            studentList.add("57988");
+            studentList.add("57999");
+            studentList.add("58009");
+            studentList.add("58016");
+            studentList.add("58041");
+            studentList.add("58063");
+            studentList.add("58064");
+            studentList.add("58087");
+            studentList.add("59176");
+//            studentList.add("57966");
             LinkedList<StudentData> studentDataLinkedList = new LinkedList<>();
             for (String studentPass : studentList) {
                 studentDataLinkedList.add(new StudentData(studentPass));
