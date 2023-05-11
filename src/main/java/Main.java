@@ -81,7 +81,7 @@ public class Main{
                 LinkedList<StudentData> studentDataLinkedList = new LinkedList<>();
                 file = new File(directory, group.getGroupName() + ".json");
                 file.createNewFile();
-                System.out.print(group.getGroupName());
+                System.out.println(group.getGroupName());
                 for (String studentPass : group.getStudentList()) {
                     studentDataLinkedList.add(new StudentData(studentPass));
                 }
