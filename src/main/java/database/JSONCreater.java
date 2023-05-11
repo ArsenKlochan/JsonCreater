@@ -45,6 +45,13 @@ public class JSONCreater {
             oneStudent.put("average_ECTS", student.getAverage_ECTS());
             oneStudent.put("diploma_theme", student.getDiploma_theme());
             oneStudent.put("diploma_theme_E", student.getDiploma_theme_E());
+            oneStudent.put("percent_twos", student.getPercent_twos());
+            oneStudent.put("percent_threes", student.getPercent_threes());
+            oneStudent.put("percent_fours", student.getPercent_fours());
+            oneStudent.put("percent_fives", student.getPercent_fives());
+            oneStudent.put("excellence", student.getExcellence());
+            oneStudent.put("excellenceEng", student.getExcellenceEng());
+
             JSONArray marks = new JSONArray();
             JSONArray course_works = new JSONArray();
             JSONArray practisies = new JSONArray();
