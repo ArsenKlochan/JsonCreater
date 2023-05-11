@@ -473,10 +473,10 @@ public class StudentData {
     }
 //   метод визначення відсотку п'ятірок, чітвірок, трійок та двійок
     private void getPrrcentMarks(){
-        double percentTwos = two*100.0/countMarks;
-        double percentThrees = three*100.0/countMarks;
-        double percentFours = four*100.0/countMarks;
-        double percentFives = five*100.0/countMarks;
+        double percentTwos = Math.round(two*1000.0/countMarks)/10;
+        double percentThrees = Math.round(three*1000.0/countMarks)/10;
+        double percentFours = Math.round(four*1000.0/countMarks)/10;
+        double percentFives = Math.round(five*1000.0/countMarks)/10;
         percent_fives = String.format("%.1f", percentFives) + " %";
         percent_fours = String.format("%.1f", percentFours) + " %";
         percent_threes = String.format("%.1f", percentThrees) + " %";
