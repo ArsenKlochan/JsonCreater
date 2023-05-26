@@ -1,6 +1,8 @@
 package database.objects;
 
+import com.fasterxml.jackson.databind.util.ISO8601Utils;
 import database.BaseConnector;
+import org.w3c.dom.ls.LSOutput;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -97,19 +99,26 @@ public class StudentData {
 //    Отримання даних про студента з БД
     public StudentData(String pass) {
         try {
+            five = 0;
+            four = 0;
+            three = 0;
+            two = 0;
+            countMarks = 0;
             System.out.print(".");
             Statement statement = connection.createStatement();
 //отримання даних з таблиці анкета
             ResultSet resultSet1 = statement.executeQuery("SELECT Birth, SNomDokOsv, DateDokOsv, NameDokOsv, NavchZakl, NavchZaklEn, P, I, B, p_en, i_en, b_en, FAC_ID, educationEdboId, personEdboId FROM anketu WHERE pass = '" + pass + "'");
             while (resultSet1.next()) {
                 this.date_birth = dateFormatString(resultSet1.getString(1));
+                String birthDate = this.date_birth.substring(0,2)+"/"+this.date_birth.substring(3,5)+"/"+this.date_birth.substring(6,10); //дата народжденнґя через слеш
+                this.date_birth=birthDate;
                 this.prev_diploma_number = resultSet1.getString(2);
                 this.prev_diploma_date = dateFormatString(resultSet1.getString(3));
                 this.prev_diploma_date_slash=this.prev_diploma_date.substring(0,2)+"/"+this.prev_diploma_date.substring(3,5)+"/"+this.prev_diploma_date.substring(6,10);
                 this.name_dok_osv = resultSet1.getString(4);
                 this.name_dok_osv_en = getNameDocOsvEn(name_dok_osv);
-                this.prev_navch_zakl = resultSet1.getString(5);
-                this.prev_navch_zakl_en = resultSet1.getString(6);
+                this.prev_navch_zakl = resultSet1.getString(5) + ", Україна";
+                this.prev_navch_zakl_en = resultSet1.getString(6) + ", Ukraine";
                 this.surname_ukr = resultSet1.getString(7);
                 this.name_ukr = resultSet1.getString(8);
                 this.middlename_ukr = resultSet1.getString(9);
@@ -348,6 +357,7 @@ public class StudentData {
     }
     public String getTotal_credits() {
         return avarage.getCredits();
+        //.substring(0, avarage.getCredits().indexOf(','));
     }
     public String getAverage_mark() {
         return average_mark;
@@ -475,18 +485,17 @@ public class StudentData {
     }
 //   метод визначення відсотку п'ятірок, чітвірок, трійок та двійок
     private void getPrrcentMarks(){
-        double percentTwos = Math.round(two*10000.0/countMarks)/100;
-        double percentThrees = Math.round(three*10000.0/countMarks)/100;
-        double percentFours = Math.round(four*10000.0/countMarks)/100;
-        double percentFives = Math.round(five*10000.0/countMarks)/100;
+        double percentTwos = Math.round(two*10000.0/countMarks)/100.0;
+        double percentThrees = Math.round(three*10000.0/countMarks)/100.0;
+        double percentFours = Math.round(four*10000.0/countMarks)/100.0;
+        double percentFives = Math.round(five*10000.0/countMarks)/100.0;
         double percentSum = percentFives + percentFours + percentThrees + percentTwos;
         percent_fives = String.format("%.2f", percentFives) + " %";
         percent_fours = String.format("%.2f", percentFours) + " %";
         percent_threes = String.format("%.2f", percentThrees) + " %";
         percent_twos = String.format("%.2f", percentTwos) + " %";
         percent_sum = String.format("%.2f", percentSum) + " %";
-
-        if(two == 0 && three == 0 && percentFives<=25.0){
+        if(two == 0 && three == 0 && percentFives>=25.0){
             excellence= "З відзнакою";
             excellenceEng = "With honours";
         }
