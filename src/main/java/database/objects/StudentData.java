@@ -496,12 +496,12 @@ public class StudentData {
         percent_twos = String.format("%.2f", percentTwos) + " %";
         percent_sum = String.format("%.2f", percentSum) + " %";
         if(two == 0 && three == 0 && percentFives>=25.0){
-            excellence= "З відзнакою";
-            excellenceEng = "With honours";
+            excellence= "З відзнакою\n";
+            excellenceEng = "With honours\n";
         }
         else {
-            excellence= "Інформація про особливі досягнення та відзнаки відсутня";
-            excellenceEng = "Information on academic excellence and honours is absent";
+            excellence= "-";
+            excellenceEng = "-";
         }
     }
 
