@@ -500,8 +500,8 @@ public class StudentData {
             excellenceEng = "With honours\n";
         }
         else {
-            excellence= "-";
-            excellenceEng = "-";
+            excellence= "Особливі досягнення та відзнаки відсутні";
+            excellenceEng = "Without special academic excellence and honours";
         }
     }
 
