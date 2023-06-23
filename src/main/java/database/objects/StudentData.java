@@ -495,9 +495,9 @@ public class StudentData {
         percent_threes = String.format("%.2f", percentThrees) + " %";
         percent_twos = String.format("%.2f", percentTwos) + " %";
         percent_sum = String.format("%.2f", percentSum) + " %";
-        if(two == 0 && three == 0 && percentFives>=25.0){
-            excellence= "З відзнакою\n";
-            excellenceEng = "With honours\n";
+        if(two == 0 && three == 0 && percentFours<=25.0){
+            excellence= "З відзнакою";
+            excellenceEng = "With honours";
         }
         else {
             excellence= "Особливі досягнення та відзнаки відсутні";

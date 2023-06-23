@@ -78,15 +78,17 @@ public class Main{
             System.out.println(faculty.getFacultuName());
             System.out.println("Розпочалався процес формування json-файлів. Назва групи для якої формується json-файл буде відображатись в консолі.");
             for (Group group : faculty.getGroupList()) {
-                LinkedList<StudentData> studentDataLinkedList = new LinkedList<>();
-                file = new File(directory, group.getGroupName() + ".json");
-                file.createNewFile();
-                System.out.println(group.getGroupName());
-                for (String studentPass : group.getStudentList()) {
-                    studentDataLinkedList.add(new StudentData(studentPass));
-                }
-                System.out.println();
-                JSONCreater.writeJsonObject(file.getAbsolutePath(), studentDataLinkedList);
+//                if(group.getGroupName().contains("мн-2-1-21")) {
+                    LinkedList<StudentData> studentDataLinkedList = new LinkedList<>();
+                    file = new File(directory, group.getGroupName() + ".json");
+                    file.createNewFile();
+                    System.out.println(group.getGroupName());
+                    for (String studentPass : group.getStudentList()) {
+                        studentDataLinkedList.add(new StudentData(studentPass));
+                    }
+                    System.out.println();
+                    JSONCreater.writeJsonObject(file.getAbsolutePath(), studentDataLinkedList);
+//                }
             }
             System.out.println("Done");
         } catch (IOException e) {
