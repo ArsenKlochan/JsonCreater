@@ -110,6 +110,7 @@ public class StudentData {
             ResultSet resultSet1 = statement.executeQuery("SELECT Birth, SNomDokOsv, DateDokOsv, NameDokOsv, NavchZakl, NavchZaklEn, P, I, B, p_en, i_en, b_en, FAC_ID, educationEdboId, personEdboId FROM anketu WHERE pass = '" + pass + "'");
             while (resultSet1.next()) {
                 this.date_birth = dateFormatString(resultSet1.getString(1));
+              //  System.out.println(resultSet1.getString(1));
                 String birthDate = this.date_birth.substring(0,2)+"/"+this.date_birth.substring(3,5)+"/"+this.date_birth.substring(6,10); //дата народжденнґя через слеш
                 this.date_birth=birthDate;
                 this.prev_diploma_number = resultSet1.getString(2);

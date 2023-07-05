@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 public class StudentChooseSystem {
@@ -19,7 +20,7 @@ public class StudentChooseSystem {
     private static String[] formOfStudy = {"д", "з"};
     private static BaseConnector connector = new BaseConnector();
     private static Connection connection = connector.getConnection();
-    private static ArrayList<String> studentsId = new ArrayList<>();
+    private static HashSet<String> studentsId = new HashSet<>();
 
     private static ArrayList<Group> groups = new ArrayList<>();
     private static ArrayList<String> groupsName = new ArrayList<>();
