@@ -27,8 +27,8 @@ public class Main{
             StudentChooseSystem studentChooseSystem = new StudentChooseSystem();
             studentChooseSystem.chooseStudent();
 //            chooseAll(studentChooseSystem);
-           chooseForGroup(studentChooseSystem);
-        // chooseForFaculty(studentChooseSystem);
+        //     chooseForGroup(studentChooseSystem);
+        chooseForFaculty(studentChooseSystem);
 //        chooseForStupidGroup(studentChooseSystem);
 
 
@@ -138,19 +138,37 @@ public class Main{
             System.out.println("Режим роботи програми, який забезпечує створення json-файлів для конкретної групи");
             System.out.println("Розпочався процес формування json-файлів. Зачекайте кілька митей");
             ArrayList<String> studentList = new ArrayList<>();
-            studentList.add("57966");
-            studentList.add("57978");
-            studentList.add("57980");
-            studentList.add("57988");
-            studentList.add("57999");
-            studentList.add("58009");
-            studentList.add("58016");
-            studentList.add("58041");
-            studentList.add("58063");
-            studentList.add("58064");
-            studentList.add("58087");
-            studentList.add("59176");
-//            studentList.add("57966");
+
+            studentList.add("68075");
+            studentList.add("68076");
+            studentList.add("68077");
+            studentList.add("68078");
+            studentList.add("68079");
+            studentList.add("68080");
+            studentList.add("68081");
+            studentList.add("68082");
+            studentList.add("68083");
+            studentList.add("68084");
+            studentList.add("68085");
+            studentList.add("68086");
+            studentList.add("68087");
+            studentList.add("68088");
+            studentList.add("68089");
+            studentList.add("68090");
+            studentList.add("68091");
+            studentList.add("68092");
+            studentList.add("68093");
+            studentList.add("68094");
+            studentList.add("68095");
+            studentList.add("68096");
+            studentList.add("68097");
+            studentList.add("68098");
+            studentList.add("68345");
+
+
+
+
+
             LinkedList<StudentData> studentDataLinkedList = new LinkedList<>();
             for (String studentPass : studentList) {
                 studentDataLinkedList.add(new StudentData(studentPass));
