@@ -27,9 +27,9 @@ public class Main{
             StudentChooseSystem studentChooseSystem = new StudentChooseSystem();
             studentChooseSystem.chooseStudent();
 //            chooseAll(studentChooseSystem);
-        //     chooseForGroup(studentChooseSystem);
-        chooseForFaculty(studentChooseSystem);
-//        chooseForStupidGroup(studentChooseSystem);
+//            chooseForGroup(studentChooseSystem);
+            chooseForFaculty(studentChooseSystem);
+        //       chooseForStupidGroup(studentChooseSystem);
 
 
 //        Application.launch(args);
