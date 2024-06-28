@@ -28,6 +28,7 @@ public class StudentChooseSystem {
     private static ArrayList<Faculty> faculties = new ArrayList<>();
     private static ArrayList<String> facultiesId = new ArrayList<>();
 
+
     public ArrayList<Faculty> getFaculties() {
         return faculties;
     }

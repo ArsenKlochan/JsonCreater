@@ -53,6 +53,7 @@ public class JSONCreater {
             oneStudent.put("excellenceEng", student.getExcellenceEng());
             oneStudent.put("percent_sum", student.getPercent_sum());
 
+
             JSONArray marks = new JSONArray();
             JSONArray course_works = new JSONArray();
             JSONArray practisies = new JSONArray();

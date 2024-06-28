@@ -35,6 +35,7 @@ public class Main{
 //        Application.launch(args);
 
     }
+
 //    метод формування json-файлів для всіх груп, що випускаються
     private static void chooseAll(StudentChooseSystem studentChooseSystem){
         try {

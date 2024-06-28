@@ -20,7 +20,6 @@ public class MainController {
             System.err.print("Введенные пароли не равны");
         }
     }
-
     @FXML
     public void cancelOnClick() {
         System.exit(0);

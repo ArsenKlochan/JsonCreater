@@ -12,6 +12,7 @@ public class BaseConnector {
         String dataBaseName = "dekanat";
         String port = "3306";
 
+
         try{
             return DriverManager.getConnection(url, login, password);
         }
