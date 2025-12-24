@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class BaseConnector {
     public Connection getConnection(){
         String login = "admin";
-        String password = "enE@^3e86pH3V-";
+        String password = ;
         String url = "jdbc:mysql://212.111.203.178/dekanat";
         String dataBaseName = "dekanat";
         String port = "3306";
